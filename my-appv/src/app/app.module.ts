@@ -3,12 +3,12 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms'
 
 import { AppComponent } from './app.component';
-import { KeyUpComponent } from './keyup.component';
+import { CalcComponent } from './calculator.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    KeyUpComponent
+    CalcComponent
   ],
   imports: [
     BrowserModule

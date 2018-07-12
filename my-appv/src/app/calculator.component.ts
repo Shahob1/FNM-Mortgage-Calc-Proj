@@ -9,6 +9,10 @@ import { Calculator } from './calculator';
 
 })
 export class CalcComponent {
-  mortgageCalc = new Calculator()
+    mortgageCalc = new Calculator(400000, 0.2, .0035, 30)
+
+    submitted = false;
+
+    onSubmit() { this.submitted = true; }
 
 }
