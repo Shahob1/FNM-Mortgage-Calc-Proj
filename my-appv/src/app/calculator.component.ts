@@ -5,7 +5,7 @@ import { Calculator } from './calculator';
 
 @Component({
   selector: 'app-calc',
-  templateUrl: './app.component.html'
+  templateUrl: './calc.component.html'
 
 })
 export class CalcComponent {
@@ -14,5 +14,9 @@ export class CalcComponent {
     submitted = false;
 
     onSubmit() { this.submitted = true; }
+
+    get diagnostic() {
+        return JSON.stringify(this.mortgageCalc);
+    }
 
 }
