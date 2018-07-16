@@ -3,46 +3,43 @@ import { Component } from '@angular/core';
 
 export class Calculator {
 
-  public totalPrincipal: number;
-  public downPayment: number;
-  public interestRate: number;
-  public loanTerm: number;
+  public principal: number;
+  public downpayment: number;
+  public interest: number;
+  public years: number;
+
+  // calculated values
+  public monthlyRate: number;
+  public numberOfPayments: number;
   public monthlyPayment: number;
-  
 
 
-  constructor(totalPrincipal: number, downPayment: number, interestRate: number, loanTerm: number)
+  constructor(principal: number, downpayment: number, interest: number, years: number)
   {
-    this.totalPrincipal = totalPrincipal;
-    this.downPayment = downPayment;
-    this.interestRate = interestRate;
-    this.loanTerm = loanTerm;
+    this.principal = principal;
+    this.downpayment = downpayment;
+    this.interest = interest;
+    this.years = years;
 
-    var monthlyRate = (this.interestRate/100)/12;
-    var numberOfPayments = this.loanTerm * 12;
-    var monthlyPayment = ((monthlyRate * ((monthlyRate + 1) ** numberOfPayments)) / 
-       (((monthlyRate + 1) ** numberOfPayments) - 1));
+    // calculated values 
+    this.monthlyRate = (this.interest / 100) / 12;
+    this.numberOfPayments = this.years * 12;
+    this.monthlyPayment = ((this.monthlyRate * ((this.monthlyRate + 1) ** this.numberOfPayments)) / 
+       (((this.monthlyRate + 1) ** this.numberOfPayments) - 1)) * (this.principal-this.downpayment);
 
   }
 
   calculateMortgage()
   {
-     var monthlyRate = (this.interestRate/100)/12;
-     var numberOfPayments = this.loanTerm * 12;
-     var monthlyPayment = ((monthlyRate * ((monthlyRate + 1) ** numberOfPayments)) / 
-        (((monthlyRate + 1) ** numberOfPayments) - 1)) * (this.totalPrincipal-this.downPayment);
       
-        return monthlyPayment.toLocaleString('en-us', {minimumFractionDigits: 2});
+        return this.monthlyPayment.toLocaleString('en-us', {minimumFractionDigits: 2});
 
   }
 
   calculateInterest()
   {
-    var monthlyRate = (this.interestRate/100)/12;
-    var numberOfPayments = this.loanTerm * 12;
-    var monthlyPayment = ((monthlyRate * ((monthlyRate + 1) ** numberOfPayments)) / 
-       (((monthlyRate + 1) ** numberOfPayments) - 1)) * (this.totalPrincipal-this.downPayment);
-    var totalInterest = (monthlyPayment * numberOfPayments) - this.totalPrincipal;
+
+    var totalInterest = (this.monthlyPayment * this.numberOfPayments) - this.principal;
 
        return totalInterest.toLocaleString('en-us', {minimumFractionDigits: 2});
   
@@ -50,13 +47,10 @@ export class Calculator {
 
   calculateTotal()
   {
-    var monthlyRate = (this.interestRate/100)/12;
-    var numberOfPayments = this.loanTerm * 12;
-    var monthlyPayment = ((monthlyRate * ((monthlyRate + 1) ** numberOfPayments)) / 
-       (((monthlyRate + 1) ** numberOfPayments) - 1)) * (this.totalPrincipal-this.downPayment);
-    var total = monthlyPayment * numberOfPayments;
 
-       return total.toLocaleString('en-us', {minimumFractionDigits: 2});
+    var totalCost = this.monthlyPayment * this.numberOfPayments;
+
+       return totalCost.toLocaleString('en-us', {minimumFractionDigits: 2});
 
   }
 
