@@ -8,9 +8,8 @@ import { Calculator } from './calculator';
   templateUrl: './calc.component.html'
 
 })
-
 export class CalcComponent {
-    mortgageCalc = new Calculator()
+    mortgageCalc = new Calculator(400000, 0.2, .0035, 30)
 
     submitted = false;
 

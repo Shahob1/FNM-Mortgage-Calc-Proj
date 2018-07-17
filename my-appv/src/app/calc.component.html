@@ -1,38 +1,56 @@
 <div style="text-align:center">
     <h1>
-        Welcome to {{ title }}!
+        Welcome to Mortgage Calculator!
     </h1>
     <div class="container">
-        <h1>Mortgage Calculator</h1>
-        <form (ngsubmit)="onSubmit()" #calcform ="ngForm">
-                <div class="form-group">
-                    <label for="homePrice">Total Home Price</label>
-                    <input type="number" class="form-control" id="homePrice"
-                           [(ngModel)]="mortgageCalc.homePrice" name="homePrice" />
+        <form class="form-horizontal" #calcform ="ngForm">
+            <!--{{diagnostic}}-->
+            
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="homePrice">Total Home Price : </label>
+                <div class="col-sm-10">
+                  <input type="number" class="form-control" id="homePrice"
+                       [(ngModel)]="mortgageCalc.homePrice" name="homePrice" />
                 </div>
-                <div class="form-group">
-                    <label for="downPayment">Down Payment</label>
-                    <input type="number" class="form-control" id="downPayment"
-                           [(ngModel)]="mortgageCalc.downPayment" name="downPayment" />
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="downPayment">Down Payment : </label>
+                <div class="col-sm-10">
+                  <input type="number" class="form-control" id="downPayment"
+                       [(ngModel)]="mortgageCalc.downPayment" name="downPayment" />
                 </div>
-                <div class="form-group">
-                    <label for="loanAmount">Loan Amount</label>
-                    <input type="number" class="form-control" id="loanAmount" required
-                           [(ngModel)]="mortgageCalc.loanAmount" name="loanAmount" />
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="loanAmount">Loan Amount : </label>
+                <div class="col-sm-10">
+                  <input type="number" class="form-control" id="loanAmount" required
+                       [(ngModel)]="mortgageCalc.loanAmount" name="loanAmount" />
                 </div>
-                <div class="form-group">
-                    <label for="interestRate">Interest Rate</label>
-                    <input type="number" class="form-control" id="interestRate" required
-                           [(ngModel)]="mortgageCalc.interestRate" name="interestRate" />
+                
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="interestRate">Interest Rate : </label>
+                <div class="col-sm-10">
+                  <input type="number" class="form-control" id="interestRate" required
+                       [(ngModel)]="mortgageCalc.interestRate" name="interestRate" />
                 </div>
-                <div class="form-group">
-                    <label for="loanTerm">Loan Term</label>
-                    <input type="number" class="form-control" id="loanTerm" required
-                           [(ngModel)]="mortgageCalc.loanTerm" name="loanTerm" />
+                
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="loanTerm">Loan Term : </label>
+                <div class="col-sm-10">
+                  <input type="number" class="form-control" id="loanTerm" required
+                       [(ngModel)]="mortgageCalc.loanTerm" name="loanTerm" />
                 </div>
+                
+            </div>
 
-            <button type="submit" class="btn btn-success" [disabled]="!calcform.form.valid">Submit</button>
+            <button type="submit" class="btn btn-success">Submit</button>
 
-            </form>
-</div>
+        </form>
+    </div>
 </div>
