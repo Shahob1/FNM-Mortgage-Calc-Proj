@@ -7,13 +7,16 @@ export class Calculator {
   public downpayment: number;
   public interest: number;
   public years: number;
+  public loanAmount: number;
 
   // calculated values
   public monthlyRate: number;
   public numberOfPayments: number;
   public monthlyPayment: number;
 
-  constructor(){}
+  constructor(){
+  	
+  }
 
   calculateMortgage()
   {
