@@ -3,11 +3,12 @@
         Welcome to Mortgage Calculator!
     </h1>
     <div class="container">
+        <div class="col-md-6">
         <form class="form-horizontal" #calcform ="ngForm">
             <!--{{diagnostic}}-->
             
             <div class="form-group">
-                <label class="control-label col-sm-2" for="homePrice">Total Home Price : </label>
+                <label class="control-label col-sm-2" for="homePrice">Home Price: </label>
                 <div class="col-sm-10">
                   <input type="number" class="form-control" id="homePrice"
                        [(ngModel)]="mortgageCalc.homePrice" name="homePrice" />
@@ -15,7 +16,7 @@
             </div>
             
             <div class="form-group">
-                <label class="control-label col-sm-2" for="downPayment">Down Payment : </label>
+                <label class="control-label col-sm-2" for="downPayment">Down Payment: </label>
                 <div class="col-sm-10">
                   <input type="number" class="form-control" id="downPayment"
                        [(ngModel)]="mortgageCalc.downPayment" name="downPayment" />
@@ -23,7 +24,7 @@
             </div>
             
             <div class="form-group">
-                <label class="control-label col-sm-2" for="loanAmount">Loan Amount : </label>
+                <label class="control-label col-sm-2" for="loanAmount">Loan Amount: </label>
                 <div class="col-sm-10">
                   <input type="number" class="form-control" id="loanAmount" required
                        [(ngModel)]="mortgageCalc.loanAmount" name="loanAmount" />
@@ -32,7 +33,7 @@
             </div>
             
             <div class="form-group">
-                <label class="control-label col-sm-2" for="interestRate">Interest Rate : </label>
+                <label class="control-label col-sm-2" for="interestRate">Interest Rate: </label>
                 <div class="col-sm-10">
                   <input type="number" class="form-control" id="interestRate" required
                        [(ngModel)]="mortgageCalc.interestRate" name="interestRate" />
@@ -41,7 +42,7 @@
             </div>
             
             <div class="form-group">
-                <label class="control-label col-sm-2" for="loanTerm">Loan Term : </label>
+                <label class="control-label col-sm-2" for="loanTerm">Loan Term: </label>
                 <div class="col-sm-10">
                   <input type="number" class="form-control" id="loanTerm" required
                        [(ngModel)]="mortgageCalc.loanTerm" name="loanTerm" />
@@ -52,5 +53,12 @@
             <button type="submit" class="btn btn-success">Submit</button>
 
         </form>
+    </div>
+    <div class="col-md-6">
+        <h2> Output Values </h2>
+
+    </div>
+
+
     </div>
 </div>
