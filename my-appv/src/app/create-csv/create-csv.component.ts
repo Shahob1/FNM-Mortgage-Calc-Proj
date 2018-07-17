@@ -10,7 +10,7 @@ import { Calculator } from '../calculator'
 })
 export class CreateCsvComponent implements OnInit {
 	//mortgageCalc;
-  //private calc:CalcComponent
+  private calc:CalcComponent
 	//calc = new CalcComponent();
 
 
@@ -18,10 +18,13 @@ export class CreateCsvComponent implements OnInit {
 
   createCsv(){
   	//this.mortgageCalc = this.calc.Mcalculator();
+    
+    var data = new Array(360);
+    
+    
 
-
-
-  	var data = [
+  
+  data = [
   {
     Principal: 200000,
     DownPayment: 0,
@@ -29,15 +32,17 @@ export class CreateCsvComponent implements OnInit {
     Interest: 6.75  ,
     LoanTerm: 30
   },
-  {
-    Principal: 200000,
+	]; 
+
+  data[1] = {
+    Principal: 4000,
     DownPayment: 0,
     LoanAmount: "loan",
     Interest: 6.75  ,
     LoanTerm: 30
-  }
-	];
-  data[0].Principal = 10
+    }
+
+  console.log(data);
 
 	new Angular5Csv(data, 'My Report');
 
@@ -47,4 +52,3 @@ export class CreateCsvComponent implements OnInit {
   }
 
 }
-
