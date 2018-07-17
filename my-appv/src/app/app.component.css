@@ -4,6 +4,7 @@
 .topBar {
   height: 45px; 
   background-color:#000034;
+  color: #f1f1f1;
 }
 /* The side navigation menu */
 .sidenav {
