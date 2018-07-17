@@ -12,11 +12,15 @@ import { Calculator } from './calculator';
 export class CalcComponent {
     mortgageCalc = new Calculator()
 
+
     submitted = false;
 
     onSubmit() { this.submitted = true; }
 
-    get diagnostic() {
+    diagnostic() {
+    	console.log("calculateMortgage:" + this.mortgageCalc.calculateMortgage());
+    	console.log("calculateInterest:" + this.mortgageCalc.calculateInterest());
+    	console.log("calculateTotalCost:" + this.mortgageCalc.calculateTotal());
         return JSON.stringify(this.mortgageCalc);
     }
 
