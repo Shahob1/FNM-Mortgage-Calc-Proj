@@ -1,41 +1,117 @@
 <div style="text-align:center">
     <h1>
-        Welcome to {{ title }}!
+        Welcome to Mortgage Calculator!
     </h1>
     <div class="container">
-        <h1>Mortgage Calculator</h1>
-        <form (ngsubmit)="onSubmit()" #calcform ="ngForm">
+        <div class="col-md-6">
+            <h2>Input</h2>
+            <form class="form-horizontal" #calcform ="ngForm">
+                <!--{{diagnostic}}-->
+                
                 <div class="form-group">
-                    <label for="homePrice">Total Home Price</label>
+                    <label class="control-label col-sm-4" for="homePrice">Home Price: </label>
+                    <div class="col-sm-8">
                     <input type="number" class="form-control" id="homePrice"
-                           [(ngModel)]="mortgageCalc.principal" name="homePrice" />
+                        [(ngModel)]="mortgageCalc.principal" name="homePrice" />
+                    </div>
                 </div>
+                
                 <div class="form-group">
-                    <label for="downPayment">Down Payment</label>
+                    <label class="control-label col-sm-4" for="downPayment">Down Payment: </label>
+                    <div class="col-sm-8">
                     <input type="number" class="form-control" id="downPayment"
-                           [(ngModel)]="mortgageCalc.downpayment" name="downPayment" />
+                        [(ngModel)]="mortgageCalc.downPayment" name="downPayment" />
+                    </div>
                 </div>
+                
                 <div class="form-group">
-                    <label for="loanAmount">Loan Amount</label>
-                    <input type="number" class="form-control" id="loanAmount"required
-                           [(ngModel)]="mortgageCalc.loanAmount" name="loanAmount"/>
+                    <label class="control-label col-sm-4" for="loanAmount">Loan Amount: </label>
+                    <div class="col-sm-8">
+                    <input type="number" class="form-control" id="loanAmount" required
+                        [(ngModel)]="mortgageCalc.loanAmount" name="loanAmount" />
+                    </div>
+                    
                 </div>
+                
                 <div class="form-group">
-                    <label for="interestRate">Interest Rate</label>
+                    <label class="control-label col-sm-4" for="interestRate">Interest Rate: </label>
+                    <div class="col-sm-8">
                     <input type="number" class="form-control" id="interestRate" required
-                           [(ngModel)]="mortgageCalc.interest" name="interestRate" />
+                        [(ngModel)]="mortgageCalc.interest" name="interestRate" />
+                    </div>
+                    
                 </div>
+                
                 <div class="form-group">
-                    <label for="loanTerm">Loan Term</label>
+                    <label class="control-label col-sm-4" for="loanTerm">Loan Term: </label>
+                    <div class="col-sm-8">
                     <input type="number" class="form-control" id="loanTerm" required
-                           [(ngModel)]="mortgageCalc.years" name="loanTerm" />
+                        [(ngModel)]="mortgageCalc.years" name="loanTerm" />
+                    </div>
+                    
                 </div>
 
-            <button type="submit" class="btn btn-success" [disabled]="!calcform.form.valid" (click) ="diagnostic()" >Submit</button>
-            <button type="button" class="btn btn-success"  (click) ="calculateAmortization()" >Amortize</button>
-            <button class="btn btn-success"(click)="downloadCSV()">Download Report</button>
-            <app-form-upload></app-form-upload>
+                <button type="submit" class="btn btn-success">Submit</button>
 
             </form>
-</div>
+        </div>
+        <div class="col-md-6">
+            <h2>Output</h2>
+            <form class="form-horizontal" #calcform ="ngForm">
+                <!--{{diagnostic}}-->
+                
+                <div class="form-group">
+                    <label class="control-label col-sm-4" for="homePrice">Monthly Payment: </label>
+                    <div class="col-sm-8">
+                    <input  class="form-control" id="homePrice"
+                        [(ngModel)]="mortgageCalc.homePrice" name="homePrice" disabled/>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="control-label col-sm-4" for="downPayment">Total Interest: </label>
+                    <div class="col-sm-8">
+                    <input  class="form-control" id="downPayment"
+                        [(ngModel)]="mortgageCalc.downPayment" name="downPayment" disabled/>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="control-label col-sm-4" for="loanAmount">Total Cost: </label>
+                    <div class="col-sm-8">
+                    <input  class="form-control" id="loanAmount" required
+                        [(ngModel)]="mortgageCalc.loanAmount" name="loanAmount" disabled/>
+                    </div>
+                    
+                </div>
+                
+                <button type="button" class="btn btn-success"  (click) ="calculateAmortization()" >Amortize</button>
+                <button class="btn btn-success"(click)="downloadCSV()">Download Report</button>
+                <app-form-upload></app-form-upload>
+
+            </form>
+
+        </div>
+    </div>
+
+    <div class="container" style="padding-top: 30px;" id="time-series">
+            <h4>
+                Principal and Interest by Date
+                <span>
+                        <a class="reset"
+                          
+                          (click)="filterAll()"
+                          style="display: none;">
+                          reset
+                        </a>
+                </span>
+            </h4>
+    </div>
+
+    <div class="container" style="padding-top: 30px; padding-left: 178px;" id="table">
+            <h4>
+                    
+            </h4>
+    </div>
+
 </div>
