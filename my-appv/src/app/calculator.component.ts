@@ -10,7 +10,8 @@ import * as dc from 'dc';
 
 @Component({
   selector: 'app-calc',
-  templateUrl: './calc.component.html'
+  templateUrl: './calc.component.html',
+  styleUrls: ['./calc.component.css']
 
 })
 
@@ -151,9 +152,26 @@ filterAll() {
                .dimension(dimension)
                .group(function(d) { return ""})
                .size(Infinity)
-               .columns(['Month', 'Payment', 'Principal', 'Interest', 'Balance'])
+               .columns([function(d) { return d["Month"];},
+                function(d) { return d["Payment"];},
+                function(d) { return d["Principal"];},
+                function(d) { return d["Interest"];},
+                function(d) { return d["Balance"];},])
                .sortBy(function (d) {
                   return d["Month"];
+               })
+               .renderlet(function(chart){
+                    chart.selectAll('td, th')
+                        .style('border', '1px solid #ddd')
+                        .style('padding', '8px');
+                        //.style('width', '100%');
+                    chart.selectAll('tr:nth-child(even)')
+                        .style('background-color','#f2f2f2');
+                    chart.selectAll('tr:hover')
+                        .style('background-color','#ddd');
+                    chart.selectAll('tr.dc-table-group')
+                        .style('display','none');
+                    
                })
                .order(d3.ascending);
 
