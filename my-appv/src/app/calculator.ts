@@ -21,7 +21,7 @@ export class Calculator {
   calculateMortgage()
   {
       
-        return this.getMonthlyPayment().toLocaleString('en-us', {minimumFractionDigits: 2});
+        return this.getMonthlyPayment().toLocaleString('en-us', {maximumFractionDigits: 2});
 
   }
 
@@ -31,7 +31,7 @@ export class Calculator {
 
     var totalInterest = (this.getMonthlyPayment() * this.getNumberOfPayments()) - this.loanAmount;
 
-       return totalInterest.toLocaleString('en-us', {minimumFractionDigits: 2});
+       return totalInterest.toLocaleString('en-us', {maximumFractionDigits: 2});
   
   }
 
@@ -40,7 +40,7 @@ export class Calculator {
 
     var totalCost = this.getMonthlyPayment() * this.getNumberOfPayments();
 
-       return totalCost.toLocaleString('en-us', {minimumFractionDigits: 2});
+       return totalCost.toLocaleString('en-us', {maximumFractionDigits: 2});
 
   }
 
