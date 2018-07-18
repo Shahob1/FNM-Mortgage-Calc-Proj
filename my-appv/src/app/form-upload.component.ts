@@ -9,6 +9,7 @@ import { UploadFileService } from './upload-file.service';
 export class FormUploadComponent implements OnInit {
 
   selectedFiles: FileList;
+  url;
 
   constructor(private uploadService: UploadFileService) { }
 
@@ -19,6 +20,7 @@ export class FormUploadComponent implements OnInit {
     const file = this.selectedFiles.item(0);
     this.uploadService.uploadfile(file);
     this.selectedFiles = false;
+    this.url = "https://s3.us-east-2.amazonaws.com/mortgage-calc/classProject/" + file.name.toString();
   }
 
   selectFile(event) {
