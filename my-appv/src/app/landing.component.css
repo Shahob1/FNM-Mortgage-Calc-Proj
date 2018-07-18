@@ -1,6 +1,18 @@
-body {
-    background: url('https://hgtvhome.sndimg.com/content/dam/images/hgtv/fullset/2017/10/24/2/dh2018_front-yard-01-sunset-through-door-wide-Shot_19_367_h.jpg.rend.hgtvcom.966.644.suffix/1508855003262.jpeg');
+body, html {
+       /* The image used */
+       background-image: url("src\assets\FNMABackground.PNG");
 
-    background-size: cover;
+       /* Full height */
+       height: 100%; 
+   
+       /* Center and scale the image nicely */
+       background-position: center;
+       background-repeat: no-repeat;
+       background-size: cover;
 }
 
+.jumbotron {
+    background: rgb(177, 176, 176); /* This is for ie8 and below */
+    background: rgba(177, 176, 176, .7); 
+    font: Helvetica;
+ }
