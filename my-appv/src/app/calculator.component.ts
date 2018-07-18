@@ -1,6 +1,6 @@
 /* tslint:disable:class-name component-class-suffix */
 import { Component, AfterContentInit } from '@angular/core';
-import * as d3 from 'd3';
+import * as d3 from 'd3-3';
 import * as crossfilter from 'crossfilter2';
 import * as dc from 'dc';
 import { Calculator } from './calculator';
@@ -21,27 +21,64 @@ export class CalcComponent implements AfterContentInit{
         return JSON.stringify(this.mortgageCalc);
     }
 
-    ngAfterContentInit(): void {
-        var chart = dc.seriesChart("#time-series");
+    filterAll() {
+        dc.filterAll();
+        dc.redrawAll();
+    }
 
-        d3.csv("amort.csv").then(function(data) {
-            var format = d3.time.format("%B  %Y");
+    ngAfterContentInit(): void {
+        var chart = dc.compositeChart("#time-series");
+        var table = dc.dataTable("#table");
+
+        d3.csv("./assets//amort.csv",function(data) {
+            var format = d3.time.format("%B%Y");
             data.forEach(function(d) {
-                d.date = format(d.date);
+                console.log(format.parse (d["Date"]));
+                d["Date"] = format.parse((d["Date"]));
+                d["Interest"] = +d["Interest"];
+                d["Principal"] = +d["Principal"];
             });
             var ndx = crossfilter(data);
-            var dimension = ndx.dimension(function(d) {return d['Date']; });
-            var group = dimension.group().reduceSum(function(d) { return +d['Interest']; });
+            var dimension = ndx.dimension(function(d) {return (d["Date"]); });
+            var group1 = dimension.group().reduceSum(function(d) { return d["Interest"]; });
+            var group2 = dimension.group().reduceSum(function(d) { return d["Principal"]; });
 
             chart
                .width(800)
                .height(300)
-               .brushOn(false)
+               .brushOn(true)
                .yAxisLabel("Dollars")
                .xAxisLabel("Date")
-               .dimension(dimension)
-               .group(group)
+               .elasticY(true)
+               .x(d3.time.scale().domain(d3.extent(data, function(d) {
+                    return ((d["Date"]));
+                })))
+                .legend(dc.legend().x(80).y(20).itemHeight(13).gap(5))
+                .compose([
+                    dc.barChart(chart)
+                        .dimension(dimension)
+                        .colors('red')
+                        .group(group1, "Interest"),
+                        //.dashStyle([2,2]),
+                    dc.barChart(chart)
+                        .dimension(dimension)
+                        .colors('blue')
+                        .group(group2, "Principal")
+                        //.dashStyle([2,2])
+                    ])
             chart.render();
+
+            table
+               .dimension(dimension)
+               .group(function(d) { return ""})
+               .size(Infinity)
+               .columns(['No.', 'Date', 'Payment', 'ExtraPayment', 'Interest', 'Principal', 'Balance'])
+               .sortBy(function (d) {
+                  return d["Date"];
+               })
+               .order(d3.ascending);
+
+            table.render();
 
 
         });
