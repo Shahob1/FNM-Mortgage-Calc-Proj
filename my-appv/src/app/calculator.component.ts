@@ -2,6 +2,7 @@
 import { Component } from '@angular/core';
 
 import { Calculator } from './calculator';
+import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 
 @Component({
   selector: 'app-calc',
@@ -11,6 +12,8 @@ import { Calculator } from './calculator';
 
 export class CalcComponent {
     mortgageCalc = new Calculator();
+    amortizationTable = new Array(this.mortgageCalc.numberOfPayments);
+
     
 
 
@@ -37,12 +40,14 @@ export class CalcComponent {
         //var home = new Calculator(this.mortgageCalc.principal, this.mortgageCalc.downPayment, this.mortgageCalc.interest, this.mortgageCalc.years);
         console.log("number of payments" + this.mortgageCalc.getNumberOfPayments());
 
-        var amortizationTable: any[] = new Array(this.mortgageCalc.numberOfPayments);
+        
         var i: number;
+        var currBalance = this.mortgageCalc.loanAmount;
+        var monthlyPayment = this.mortgageCalc.getMonthlyPayment();
+        var numberOfPayments = this.mortgageCalc.getNumberOfPayments();
+        var monthlyRate = this.mortgageCalc.getMonthlyRate();
 
-        var currBalance = this.mortgageCalc.principal;
-
-        amortizationTable[0]= 
+        this.amortizationTable[0]= 
         {
             month : 0,
             payment : "",
@@ -51,23 +56,42 @@ export class CalcComponent {
             balance : currBalance,
         }
 
-        for(i = 1; i <= this.mortgageCalc.numberOfPayments; i++)
+        for(i = 1; i <= numberOfPayments; i++)
         {
-        var currMonthInterest = currBalance*this.mortgageCalc.getMonthlyRate();
-        var currMonthPrincipal = this.mortgageCalc.getMonthlyPayment() - currMonthInterest;
-        currBalance = currBalance - this.mortgageCalc.getMonthlyPayment();
-        amortizationTable[i]= 
+        var currMonthInterest = currBalance*monthlyRate;
+        var currMonthPrincipal = monthlyPayment - currMonthInterest;
+        currBalance = currBalance - currMonthPrincipal;
+        
+        this.amortizationTable[i]= 
         {
             month : i,
-            payment : this.mortgageCalc.monthlyPayment,
-            principal : currMonthPrincipal,
-            interest : currMonthInterest,
-            balance : currBalance,
+            payment : monthlyPayment.toLocaleString('en-us', {maximumFractionDigits: 2}),
+            principal : currMonthPrincipal.toLocaleString('en-us', {maximumFractionDigits: 2}),
+            interest : currMonthInterest.toLocaleString('en-us', {maximumFractionDigits: 2});,
+            balance : currBalance.toLocaleString('en-us', {maximumFractionDigits: 2});,
         }
 
   }
-    console.log(amortizationTable);
+    console.log(this.amortizationTable);
+    return this.amortizationTable;
+}
 
+downloadCSV(){
+
+	var table = this.calculateAmortization()
+
+	var options = { 
+    fieldSeparator: ',',
+    quoteStrings: '"',
+    decimalseparator: '.',
+    showLabels: true, 
+    showTitle: false,
+    useBom: true,
+    noDownload: false,
+    headers: ["Month", "Payment", "Principal", "Interest", "Balance"]
+  }; 
+
+	new Angular5Csv(table, 'My Report', options);
 }
 
 }

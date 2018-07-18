@@ -21,18 +21,15 @@ export class Calculator {
   calculateMortgage()
   {
       
-        return this.monthlyPayment.toLocaleString('en-us', {minimumFractionDigits: 2});
+        return this.getMonthlyPayment().toLocaleString('en-us', {minimumFractionDigits: 2});
 
   }
 
-  calculateMonthlyPayment(){
-
-  }
 
   calculateInterest()
   {
 
-    var totalInterest = (this.monthlyPayment * this.numberOfPayments) - this.principal;
+    var totalInterest = (this.getMonthlyPayment() * this.getNumberOfPayments()) - this.loanAmount;
 
        return totalInterest.toLocaleString('en-us', {minimumFractionDigits: 2});
   
@@ -41,16 +38,16 @@ export class Calculator {
   calculateTotal()
   {
 
-    var totalCost = this.monthlyPayment * this.numberOfPayments;
+    var totalCost = this.getMonthlyPayment() * this.getNumberOfPayments();
 
        return totalCost.toLocaleString('en-us', {minimumFractionDigits: 2});
 
   }
 
   // getters
-  getPrincipal()
+  getLoanAmount()
   {
-    return this.principal;
+    return this.loanAmount;
   }
 
   getDownpayment()
@@ -75,10 +72,10 @@ export class Calculator {
 
   getMonthlyPayment()
   {
-  this.monthlyRate = (this.interest / 100) / 12;
+  		this.monthlyRate = (this.interest / 100) / 12;
     	this.numberOfPayments = this.years * 12;
   		this.monthlyPayment = ((this.monthlyRate * ((this.monthlyRate + 1) ** this.numberOfPayments)) / 
-       (((this.monthlyRate + 1) ** this.numberOfPayments) - 1)) * (this.principal-this.downpayment);
+       (((this.monthlyRate + 1) ** this.numberOfPayments) - 1)) * (this.loanAmount);
     return this.monthlyPayment;
   }
 

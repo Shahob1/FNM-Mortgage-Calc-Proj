@@ -33,7 +33,7 @@
 
             <button type="submit" class="btn btn-success" [disabled]="!calcform.form.valid" (click) ="diagnostic()" >Submit</button>
             <button type="button" class="btn btn-success"  (click) ="calculateAmortization()" >Amortize</button>
-            <app-create-csv></app-create-csv>
+            <button class="btn btn-success"(click)="downloadCSV()">Download Report</button>
             <app-form-upload></app-form-upload>
 
             </form>
