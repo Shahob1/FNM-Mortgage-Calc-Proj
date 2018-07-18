@@ -1,0 +1,18 @@
+body, html {
+    /* The image used */
+    background-image: url("src\assets\house1.jpeg");
+
+    /* Full height */
+    height: 100%; 
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.jumbotron {
+ background: rgb(177, 176, 176); /* This is for ie8 and below */
+ background: rgba(177, 176, 176, .7); 
+ font: Helvetica;
+}
