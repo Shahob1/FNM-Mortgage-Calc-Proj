@@ -30,16 +30,17 @@ export class CalcComponent implements AfterContentInit{
         var chart = dc.compositeChart("#time-series");
         var table = dc.dataTable("#table");
 
-        d3.csv("./assets//amort.csv",function(data) {
-            var format = d3.time.format("%B%Y");
+        d3.csv("./assets//amort2.csv",function(data) {
+            //var format = d3.time.format("%B%Y");
             data.forEach(function(d) {
-                console.log(format.parse (d["Date"]));
-                d["Date"] = format.parse((d["Date"]));
+                //console.log(format.parse (d["Date"]));
+                //d["Date"] = format.parse((d["Date"]));
+                d["Month"] = +d["Month"];
                 d["Interest"] = +d["Interest"];
                 d["Principal"] = +d["Principal"];
             });
             var ndx = crossfilter(data);
-            var dimension = ndx.dimension(function(d) {return (d["Date"]); });
+            var dimension = ndx.dimension(function(d) {return (d["Month"]); });
             var group1 = dimension.group().reduceSum(function(d) { return d["Interest"]; });
             var group2 = dimension.group().reduceSum(function(d) { return d["Principal"]; });
 
@@ -48,10 +49,11 @@ export class CalcComponent implements AfterContentInit{
                .height(300)
                .brushOn(true)
                .yAxisLabel("Dollars")
-               .xAxisLabel("Date")
+               .xAxisLabel("Term")
                .elasticY(true)
-               .x(d3.time.scale().domain(d3.extent(data, function(d) {
-                    return ((d["Date"]));
+               //.elasticX(true)
+               .x(d3.scale.linear().domain(d3.extent(data, function(d) {
+                    return ((d["Month"]));
                 })))
                 .legend(dc.legend().x(80).y(20).itemHeight(13).gap(5))
                 .compose([
@@ -72,9 +74,9 @@ export class CalcComponent implements AfterContentInit{
                .dimension(dimension)
                .group(function(d) { return ""})
                .size(Infinity)
-               .columns(['No.', 'Date', 'Payment', 'ExtraPayment', 'Interest', 'Principal', 'Balance'])
+               .columns(['Month', 'Payment', 'Principal', 'Interest', 'Balance'])
                .sortBy(function (d) {
-                  return d["Date"];
+                  return d["Month"];
                })
                .order(d3.ascending);
 
