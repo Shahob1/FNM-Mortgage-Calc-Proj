@@ -75,10 +75,9 @@ export class CalcComponent {
         console.log("number of payments" + this.mortgageCalc.getNumberOfPayments());
         
         var i: number;
+        this.mortgageCalc.loanAmount = loanAmount.value;
         var currBalance = this.mortgageCalc.loanAmount;
-        var currBalanceLowerDown = this.mortgageCalc.loanAmount;
-        var currBalanceHigherDown = this.mortgageCalc.loanAmount;
-        var monthlyPayment = this.mortgageCalc.getMonthlyPayment(loanAmount);
+        var monthlyPayment = this.mortgageCalc.getMonthlyPayment(currBalance);
         var numberOfPayments = this.mortgageCalc.getNumberOfPayments();
         var monthlyRate = this.mortgageCalc.getMonthlyRate();
 
@@ -93,20 +92,19 @@ export class CalcComponent {
 
         for(i = 1; i <= numberOfPayments; i++)
         {
-        var currMonthInterest = currBalance*monthlyRate;
-        var currMonthPrincipal = monthlyPayment - currMonthInterest;
-        currBalance = currBalance - currMonthPrincipal;
+            var currMonthInterest = currBalance*monthlyRate;
+            var currMonthPrincipal = monthlyPayment - currMonthInterest;
+            currBalance = currBalance - currMonthPrincipal;
         
-        this.amortizationTable[i]= 
-        {
-            month : i,
-            payment : monthlyPayment.toLocaleString('en-us', {maximumFractionDigits: 2}),
-            principal : currMonthPrincipal.toLocaleString('en-us', {maximumFractionDigits: 2}),
-            interest : currMonthInterest.toLocaleString('en-us', {maximumFractionDigits: 2}),
-            balance: currBalance.toLocaleString('en-us', { maximumFractionDigits: 2 })
+            this.amortizationTable[i]= 
+            {
+                month : i,
+                payment : monthlyPayment.toLocaleString('en-us', {maximumFractionDigits: 2}),
+                principal : currMonthPrincipal.toLocaleString('en-us', {maximumFractionDigits: 2}),
+                interest : currMonthInterest.toLocaleString('en-us', {maximumFractionDigits: 2}),
+                balance: currBalance.toLocaleString('en-us', { maximumFractionDigits: 2 })
+            }
         }
-
-  }
     console.log(this.amortizationTable);
     return this.amortizationTable;
 }
