@@ -1,1 +1,13 @@
-<app-calc></app-calc>
+<div id="mySidenav" class="sidenav">
+	<a href="javascript:void(0)" class="closebtn" (click)="closeNav()">&times;</a>
+	<a (click)="closeNav()" routerLink="/" routerLinkActive="active">Home</a>
+	<a (click)="closeNav()" routerLink="/calculator" routerLinkActive="active">Calculator</a>
+	<a (click)="closeNav()" routerLink="/about-us" routerLinkActive="active">About Us</a>
+</div>
+<div class="topBar">
+<span class="openBar" (click)="openNav()">&#9776; Fannie Bae</span>
+</div>
+<router-outlet></router-outlet>
+
+
+

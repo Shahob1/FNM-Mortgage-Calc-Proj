@@ -10,14 +10,17 @@ import * as dc from 'dc';
 
 @Component({
   selector: 'app-calc',
-  templateUrl: './calc.component.html'
+  templateUrl: './calc.component.html',
+  styleUrls: ['./calc.component.css']
 
 })
 
 export class CalcComponent implements AfterContentInit{
     mortgageCalc = new Calculator();
     amortizationTable = new Array(this.mortgageCalc.numberOfPayments);
-
+    monthlyPay;
+    totalInterest;
+    totalCost;
     
 
 
@@ -29,14 +32,19 @@ export class CalcComponent implements AfterContentInit{
 
     diagnostic() {
     console.log("calculateMortgage:" + this.mortgageCalc.years);
-    	console.log("calculateMortgage:" + this.mortgageCalc.getMonthlyPayment());
-    	console.log("calculateInterest:" + this.mortgageCalc.calculateInterest());
-    	console.log("calculateTotalCost:" + this.mortgageCalc.calculateTotal());
+        console.log("calculateMortgage:" + this.mortgageCalc.getMonthlyPayment());
+
+        this.monthlyPay = this.mortgageCalc.getMonthlyPayment().toLocaleString('en-us', {maximumFractionDigits: 2});
+        this.totalInterest = this.mortgageCalc.calculateInterest().toLocaleString('en-us', {maximumFractionDigits: 2});
+        this.totalCost = this.mortgageCalc.calculateTotal().toLocaleString('en-us', {maximumFractionDigits: 2});
+
+        console.log("calculateInterest:" + this.mortgageCalc.calculateInterest());
+        console.log("calculateTotalCost:" + this.mortgageCalc.calculateTotal());
         return JSON.stringify(this.mortgageCalc);
     }
 
     sMcalculator(){
-    	return this.mortgageCalc.loanAmount;
+        return this.mortgageCalc.loanAmount;
     }
 
     calculateAmortization()
@@ -71,8 +79,8 @@ export class CalcComponent implements AfterContentInit{
             month : i,
             payment : monthlyPayment.toLocaleString('en-us', {maximumFractionDigits: 2}),
             principal : currMonthPrincipal.toLocaleString('en-us', {maximumFractionDigits: 2}),
-            interest : currMonthInterest.toLocaleString('en-us', {maximumFractionDigits: 2});,
-            balance : currBalance.toLocaleString('en-us', {maximumFractionDigits: 2});,
+            interest : currMonthInterest.toLocaleString('en-us', {maximumFractionDigits: 2}),
+            balance : currBalance.toLocaleString('en-us', {maximumFractionDigits: 2}),
         }
 
   }
@@ -82,9 +90,9 @@ export class CalcComponent implements AfterContentInit{
 
 downloadCSV(){
 
-	var table = this.calculateAmortization()
+    var table = this.calculateAmortization()
 
-	var options = { 
+    var options = { 
     fieldSeparator: ',',
     quoteStrings: '"',
     decimalseparator: '.',
@@ -95,7 +103,7 @@ downloadCSV(){
     headers: ["Month", "Payment", "Principal", "Interest", "Balance"]
   }; 
 
-	new Angular5Csv(table, 'My Report', options);
+    new Angular5Csv(table, 'My Report', options);
 }
 
 filterAll() {
@@ -151,9 +159,26 @@ filterAll() {
                .dimension(dimension)
                .group(function(d) { return ""})
                .size(Infinity)
-               .columns(['Month', 'Payment', 'Principal', 'Interest', 'Balance'])
+               .columns([function(d) { return d["Month"];},
+                function(d) { return d["Payment"];},
+                function(d) { return d["Principal"];},
+                function(d) { return d["Interest"];},
+                function(d) { return d["Balance"];},])
                .sortBy(function (d) {
                   return d["Month"];
+               })
+               .renderlet(function(chart){
+                    chart.selectAll('td, th')
+                        .style('border', '1px solid #ddd')
+                        .style('padding', '8px');
+                        //.style('width', '100%');
+                    chart.selectAll('tr:nth-child(even)')
+                        .style('background-color','#f2f2f2');
+                    chart.selectAll('tr:hover')
+                        .style('background-color','#ddd');
+                    chart.selectAll('tr.dc-table-group')
+                        .style('display','none');
+                    
                })
                .order(d3.ascending);
 

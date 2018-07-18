@@ -1,0 +1,12 @@
+<div class="tab">
+    <button class="tablinks active" (click)="opentab($event, 'calc')">Calculator</button>
+    <button class="tablinks" (click)="opentab($event, 'recent')">Recent Results</button>
+  </div>
+  
+  <div id="calc" class="tabcontent" style="display:block;">
+    <app-calc></app-calc>
+  </div>
+  
+  <div id="recent" class="tabcontent">
+    <recent-search></recent-search>
+  </div>
