@@ -1,12 +1,8 @@
 /* tslint:disable:class-name component-class-suffix */
+import { Component } from '@angular/core';
 
 import { Calculator } from './calculator';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
-
-import { Component, AfterContentInit } from '@angular/core';
-import * as d3 from 'd3-3';
-import * as crossfilter from 'crossfilter2';
-import * as dc from 'dc';
 
 @Component({
   selector: 'app-calc',
@@ -14,12 +10,9 @@ import * as dc from 'dc';
 
 })
 
-export class CalcComponent implements AfterContentInit{
+export class CalcComponent {
     mortgageCalc = new Calculator();
     amortizationTable = new Array(this.mortgageCalc.numberOfPayments);
-
-    
-
 
     constructor(){}
 
@@ -28,26 +21,64 @@ export class CalcComponent implements AfterContentInit{
     onSubmit() { this.submitted = true; }
 
     diagnostic() {
-    console.log("calculateMortgage:" + this.mortgageCalc.years);
-    	console.log("calculateMortgage:" + this.mortgageCalc.getMonthlyPayment());
-    	console.log("calculateInterest:" + this.mortgageCalc.calculateInterest());
-    	console.log("calculateTotalCost:" + this.mortgageCalc.calculateTotal());
-        return JSON.stringify(this.mortgageCalc);
-    }
+        var loanAmountMain = 0;
 
-    sMcalculator(){
-    	return this.mortgageCalc.loanAmount;
+        if (this.mortgageCalc.principal == 0 && this.mortgageCalc.downpayment == 0) {
+            loanAmountMain = this.mortgageCalc.loanAmount;
+        }
+        else {
+            if (loanAmount.value != this.mortgageCalc.principal - (this.mortgageCalc.principal * .01 * this.mortgageCalc.downpayment)) {
+                //grey out top 2
+
+                loanAmountMain = this.mortgageCalc.loanAmount;
+            }
+            else {
+                loanAmountMain = this.mortgageCalc.principal - (this.mortgageCalc.principal * .01 * (this.mortgageCalc.downpayment));
+                var loanAmount5LessDown = this.mortgageCalc.principal - (this.mortgageCalc.principal * .01 * (this.mortgageCalc.downpayment - 5));
+                var loanAmount5MoreDown = this.mortgageCalc.principal - (this.mortgageCalc.principal * .01 * (this.mortgageCalc.downpayment + 5));
+            }
+        }
+
+        //if (this.mortgageCalc.loanAmount == 0) { // hasn't been typed in
+        //    loanAmountMain = this.mortgageCalc.principal - (this.mortgageCalc.principal * .01 * (this.mortgageCalc.downpayment));
+        //    var loanAmount5LessDown = this.mortgageCalc.principal - (this.mortgageCalc.principal * .01 * (this.mortgageCalc.downpayment - 5));
+        //    var loanAmount5MoreDown = this.mortgageCalc.principal - (this.mortgageCalc.principal * .01 * (this.mortgageCalc.downpayment + 5));
+        //}
+        //else {
+        //    //if (this.mortgageCalc.loanAmount != loanAmountHTML) {
+        //        //grey out top 2 boxes and maybe erase values
+        //    //}
+        //    loanAmountMain = this.mortgageCalc.loanAmount;
+        //}
+
+        console.log("years:" + this.mortgageCalc.years);
+        console.log("loanAmountMain:" + loanAmountMain);
+        console.log("calculateMortgage:" + this.mortgageCalc.getMonthlyPayment(loanAmountMain));
+        console.log("calculateInterest:" + this.mortgageCalc.calculateInterest(loanAmountMain));
+        console.log("calculateTotalCost:" + this.mortgageCalc.calculateTotal(loanAmountMain));
+
+        console.log("loanAmount5LessDown:" + loanAmount5LessDown);
+        console.log("calculateMortgage:" + this.mortgageCalc.getMonthlyPayment(loanAmount5LessDown));
+        console.log("calculateInterest:" + this.mortgageCalc.calculateInterest(loanAmount5LessDown));
+        console.log("calculateTotalCost:" + this.mortgageCalc.calculateTotal(loanAmount5LessDown));
+
+        console.log("loanAmount5MoreDown:" + loanAmount5MoreDown);
+        console.log("calculateMortgage:" + this.mortgageCalc.getMonthlyPayment(loanAmount5MoreDown));
+        console.log("calculateInterest:" + this.mortgageCalc.calculateInterest(loanAmount5MoreDown));
+        console.log("calculateTotalCost:" + this.mortgageCalc.calculateTotal(loanAmount5MoreDown));
+        return JSON.stringify(this.mortgageCalc);
     }
 
     calculateAmortization()
     {
         //var home = new Calculator(this.mortgageCalc.principal, this.mortgageCalc.downPayment, this.mortgageCalc.interest, this.mortgageCalc.years);
         console.log("number of payments" + this.mortgageCalc.getNumberOfPayments());
-
         
         var i: number;
         var currBalance = this.mortgageCalc.loanAmount;
-        var monthlyPayment = this.mortgageCalc.getMonthlyPayment();
+        var currBalanceLowerDown = this.mortgageCalc.loanAmount;
+        var currBalanceHigherDown = this.mortgageCalc.loanAmount;
+        var monthlyPayment = this.mortgageCalc.getMonthlyPayment(loanAmount);
         var numberOfPayments = this.mortgageCalc.getNumberOfPayments();
         var monthlyRate = this.mortgageCalc.getMonthlyRate();
 
@@ -71,8 +102,8 @@ export class CalcComponent implements AfterContentInit{
             month : i,
             payment : monthlyPayment.toLocaleString('en-us', {maximumFractionDigits: 2}),
             principal : currMonthPrincipal.toLocaleString('en-us', {maximumFractionDigits: 2}),
-            interest : currMonthInterest.toLocaleString('en-us', {maximumFractionDigits: 2});,
-            balance : currBalance.toLocaleString('en-us', {maximumFractionDigits: 2});,
+            interest : currMonthInterest.toLocaleString('en-us', {maximumFractionDigits: 2}),
+            balance: currBalance.toLocaleString('en-us', { maximumFractionDigits: 2 })
         }
 
   }
@@ -97,70 +128,5 @@ downloadCSV(){
 
 	new Angular5Csv(table, 'My Report', options);
 }
-
-filterAll() {
-        dc.filterAll();
-        dc.redrawAll();
-    }
-
-    ngAfterContentInit(): void {
-        var chart = dc.compositeChart("#time-series");
-        var table = dc.dataTable("#table");
-
-        d3.csv("./assets//amort2.csv",function(data) {
-            //var format = d3.time.format("%B%Y");
-            data.forEach(function(d) {
-                //console.log(format.parse (d["Date"]));
-                //d["Date"] = format.parse((d["Date"]));
-                d["Month"] = +d["Month"];
-                d["Interest"] = +d["Interest"];
-                d["Principal"] = +d["Principal"];
-            });
-            var ndx = crossfilter(data);
-            var dimension = ndx.dimension(function(d) {return (d["Month"]); });
-            var group1 = dimension.group().reduceSum(function(d) { return d["Interest"]; });
-            var group2 = dimension.group().reduceSum(function(d) { return d["Principal"]; });
-
-            chart
-               .width(800)
-               .height(300)
-               .brushOn(true)
-               .yAxisLabel("Dollars")
-               .xAxisLabel("Term")
-               .elasticY(true)
-               //.elasticX(true)
-               .x(d3.scale.linear().domain(d3.extent(data, function(d) {
-                    return ((d["Month"]));
-                })))
-                .legend(dc.legend().x(80).y(20).itemHeight(13).gap(5))
-                .compose([
-                    dc.barChart(chart)
-                        .dimension(dimension)
-                        .colors('red')
-                        .group(group1, "Interest"),
-                        //.dashStyle([2,2]),
-                    dc.barChart(chart)
-                        .dimension(dimension)
-                        .colors('blue')
-                        .group(group2, "Principal")
-                        //.dashStyle([2,2])
-                    ])
-            chart.render();
-
-            table
-               .dimension(dimension)
-               .group(function(d) { return ""})
-               .size(Infinity)
-               .columns(['Month', 'Payment', 'Principal', 'Interest', 'Balance'])
-               .sortBy(function (d) {
-                  return d["Month"];
-               })
-               .order(d3.ascending);
-
-            table.render();
-
-
-        });
-    }
 
 }
