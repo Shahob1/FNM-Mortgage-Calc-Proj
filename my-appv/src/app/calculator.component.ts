@@ -28,9 +28,9 @@ export class CalcComponent {
         }
         else {
             if (loanAmount.value != this.mortgageCalc.principal - (this.mortgageCalc.principal * .01 * this.mortgageCalc.downpayment)) {
-                //grey out top 2
-
                 loanAmountMain = this.mortgageCalc.loanAmount;
+                homePrice.value = "";
+                downPayment.value = "";
             }
             else {
                 loanAmountMain = this.mortgageCalc.principal - (this.mortgageCalc.principal * .01 * (this.mortgageCalc.downpayment));

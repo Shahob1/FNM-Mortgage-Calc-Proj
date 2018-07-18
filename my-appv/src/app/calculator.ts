@@ -18,10 +18,10 @@ export class Calculator {
   constructor() {
   }
 
-  calculateMortgage()
+  calculateMortgage(loanAmt: any)
   {
       
-        return this.getMonthlyPayment().toLocaleString('en-us', {minimumFractionDigits: 2});
+      return this.getMonthlyPayment(loanAmt).toLocaleString('en-us', {minimumFractionDigits: 2});
 
   }
 
