@@ -1,10 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms'
 import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { CalcComponent } from './calculator.component';
+import { FormUploadComponent } from './form-upload.component';
+import { UploadFileService } from './upload-file.service';
+import { CreateCsvComponent } from './create-csv/create-csv.component';
 import { AboutUsComponent } from './aboutUs.component';
 import { CalcAndRecentComponent } from './calcAndRecent.component';
 import { RecentComponent } from './recent.component';
@@ -17,12 +20,15 @@ const appRoutes: Routes = [
 
 ];
 
+
 @NgModule({
   declarations: [
     AppComponent,
+    CalcComponent,
+    FormUploadComponent,
+    CreateCsvComponent,
     AboutUsComponent,
     CalcAndRecentComponent,
-    CalcComponent,
     RecentComponent,
     LandingComponent
   ],
@@ -34,7 +40,7 @@ const appRoutes: Routes = [
       { enableTracing: true } // <-- debugging purposes only
     )
   ],
-  providers: [],
+  providers: [UploadFileService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

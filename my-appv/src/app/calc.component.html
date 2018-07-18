@@ -12,7 +12,7 @@
                     <label class="control-label col-sm-4" for="homePrice">Home Price: </label>
                     <div class="col-sm-8">
                     <input type="number" class="form-control" id="homePrice"
-                        [(ngModel)]="mortgageCalc.homePrice" name="homePrice" />
+                        [(ngModel)]="mortgageCalc.principal" name="homePrice" />
                     </div>
                 </div>
                 
@@ -37,7 +37,7 @@
                     <label class="control-label col-sm-4" for="interestRate">Interest Rate: </label>
                     <div class="col-sm-8">
                     <input type="number" class="form-control" id="interestRate" required
-                        [(ngModel)]="mortgageCalc.interestRate" name="interestRate" />
+                        [(ngModel)]="mortgageCalc.interest" name="interestRate" />
                     </div>
                     
                 </div>
@@ -46,12 +46,12 @@
                     <label class="control-label col-sm-4" for="loanTerm">Loan Term: </label>
                     <div class="col-sm-8">
                     <input type="number" class="form-control" id="loanTerm" required
-                        [(ngModel)]="mortgageCalc.loanTerm" name="loanTerm" />
+                        [(ngModel)]="mortgageCalc.years" name="loanTerm" />
                     </div>
                     
                 </div>
 
-                <button type="submit" class="btn btn-success">Submit</button>
+                <button type="submit" class="btn btn-success" (click)="diagnostic()" >Submit</button>
 
             </form>
         </div>
@@ -85,21 +85,21 @@
                     
                 </div>
                 
-                
-
-                <button type="submit" class="btn btn-success">Download</button>
+                <button type="button" class="btn btn-success"  (click) ="calculateAmortization()" >Amortize</button>
+                <button class="btn btn-success"(click)="downloadCSV()">Download Report</button>
+                <app-form-upload></app-form-upload>
 
             </form>
 
         </div>
     </div>
 
-    <div class="container" style="padding-top: 30px;" id="time-series">
+    <div class="container" style="padding-top: 30px; padding-left: 260px;" id="time-series">
             <h4>
                 Principal and Interest by Date
                 <span>
                         <a class="reset"
-                          
+                          href="javascript:void(0)"
                           (click)="filterAll()"
                           style="display: none;">
                           reset
@@ -108,10 +108,17 @@
             </h4>
     </div>
 
-    <div class="container" style="padding-top: 30px; padding-left: 178px;" id="table">
-            <h4>
-                    
-            </h4>
+    <div class="container" id="table1">
+            <table id='table'>
+                    <thead>
+                      <tr>
+                        <th>Month</th>
+                        <th>Payment</th>
+                        <th>Principal</th>
+                        <th>Interest</th>
+                        <th>Balance</th>
+                      </tr>
+                    </thead>
+            </table>
     </div>
-
 </div>
