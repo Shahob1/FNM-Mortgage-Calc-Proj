@@ -23,6 +23,7 @@ export class UploadFileService {
       Bucket: 'mortgage-calc',
       Key: this.FOLDER + file.name,
       Body: file
+      ACL: 'public-read'
     };
  
     bucket.upload(params, function (err, data) {

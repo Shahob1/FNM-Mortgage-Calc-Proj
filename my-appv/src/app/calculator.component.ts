@@ -18,7 +18,9 @@ import * as dc from 'dc';
 export class CalcComponent implements AfterContentInit{
     mortgageCalc = new Calculator();
     amortizationTable = new Array(this.mortgageCalc.numberOfPayments);
-
+    monthlyPay;
+    totalInterest;
+    totalCost;
     
 
 
@@ -29,20 +31,30 @@ export class CalcComponent implements AfterContentInit{
     onSubmit() { this.submitted = true; }
 
     diagnostic() {
-    console.log("calculateMortgage:" + this.mortgageCalc.years);
-    	console.log("calculateMortgage:" + this.mortgageCalc.getMonthlyPayment());
-    	console.log("calculateInterest:" + this.mortgageCalc.calculateInterest());
-    	console.log("calculateTotalCost:" + this.mortgageCalc.calculateTotal());
+    /** console.log("calculateMortgage:" + this.mortgageCalc.years);
+        console.log("calculateMortgage:" + this.mortgageCalc.getMonthlyPayment());
+
+        
+
+        console.log("calculateInterest:" + this.mortgageCalc.calculateInterest());
+        console.log("calculateTotalCost:" + this.mortgageCalc.calculateTotal());*/
+
+        this.monthlyPay = this.mortgageCalc.getMonthlyPayment().toLocaleString('en-us', {maximumFractionDigits: 2});
+        this.totalInterest = this.mortgageCalc.calculateInterest().toLocaleString('en-us', {maximumFractionDigits: 2});
+        this.totalCost = this.mortgageCalc.calculateTotal().toLocaleString('en-us', {maximumFractionDigits: 2});
+
+
+        this.createViz();
         return JSON.stringify(this.mortgageCalc);
     }
 
     sMcalculator(){
-    	return this.mortgageCalc.loanAmount;
+        return this.mortgageCalc.loanAmount;
     }
 
     calculateAmortization()
     {
-        //var home = new Calculator(this.mortgageCalc.principal, this.mortgageCalc.downPayment, this.mortgageCalc.interest, this.mortgageCalc.years);
+        this.amortizationTable = new Array(this.mortgageCalc.getNumberOfPayments()); 
         console.log("number of payments" + this.mortgageCalc.getNumberOfPayments());
 
         
@@ -55,10 +67,10 @@ export class CalcComponent implements AfterContentInit{
         this.amortizationTable[0]= 
         {
             month : 0,
-            payment : "",
-            principal : "",
-            interest : "",
-            balance : currBalance,
+            payment : "0",
+            principal : "0",
+            interest : "0",
+            balance : currBalance.toLocaleString('en-us', {maximumFractionDigits: 2}),
         }
 
         for(i = 1; i <= numberOfPayments; i++)
@@ -83,9 +95,9 @@ export class CalcComponent implements AfterContentInit{
 
 downloadCSV(){
 
-	var table = this.calculateAmortization()
+    var table = this.calculateAmortization()
 
-	var options = { 
+    var options = { 
     fieldSeparator: ',',
     quoteStrings: '"',
     decimalseparator: '.',
@@ -96,7 +108,7 @@ downloadCSV(){
     headers: ["Month", "Payment", "Principal", "Interest", "Balance"]
   }; 
 
-	new Angular5Csv(table, 'My Report', options);
+    return new Angular5Csv(table, 'My Report', options);
 }
 
 filterAll() {
@@ -104,61 +116,45 @@ filterAll() {
         dc.redrawAll();
     }
 
-    ngAfterContentInit(): void {
+    createViz() {
+        dc.filterAll();
+        dc.redrawAll();
+        d3.select("#time-series").style("display","block");
+        d3.select("#table1").style("display","block");
         var chart = dc.compositeChart("#time-series");
         var table = dc.dataTable("#table");
-
-        d3.csv("./assets//amort2.csv",function(data) {
+        var data = this.calculateAmortization();
+        //d3.csv("./assets//amort2.csv",function(data1) {
             //var format = d3.time.format("%B%Y");
+        
+        //data.shift();
+        //console.log(data[0]);
+        //console.log(data1[1]);
             data.forEach(function(d) {
                 //console.log(format.parse (d["Date"]));
                 //d["Date"] = format.parse((d["Date"]));
-                d["Month"] = +d["Month"];
-                d["Interest"] = +d["Interest"];
-                d["Principal"] = +d["Principal"];
+                d.month = d.month;
+                d.payment = parseFloat(d.payment.replace(',','')).toFixed(2);
+                d.interest = parseFloat(d.interest.replace(',','')).toFixed(2);
+                d.principal = parseFloat(d.principal.replace(',','')).toFixed(2);
+                d.balance = parseFloat(d.balance.replace(',','')).toFixed(2);
             });
             var ndx = crossfilter(data);
-            var dimension = ndx.dimension(function(d) {return (d["Month"]); });
-            var group1 = dimension.group().reduceSum(function(d) { return d["Interest"]; });
-            var group2 = dimension.group().reduceSum(function(d) { return d["Principal"]; });
-
-            chart
-               .width(800)
-               .height(300)
-               .brushOn(true)
-               .yAxisLabel("Dollars")
-               .xAxisLabel("Term")
-               .elasticY(true)
-               //.elasticX(true)
-               .x(d3.scale.linear().domain(d3.extent(data, function(d) {
-                    return ((d["Month"]));
-                })))
-                .legend(dc.legend().x(80).y(20).itemHeight(13).gap(5))
-                .compose([
-                    dc.barChart(chart)
-                        .dimension(dimension)
-                        .colors('red')
-                        .group(group1, "Interest"),
-                        //.dashStyle([2,2]),
-                    dc.barChart(chart)
-                        .dimension(dimension)
-                        .colors('blue')
-                        .group(group2, "Principal")
-                        //.dashStyle([2,2])
-                    ])
-            chart.render();
-
+            var dimension = ndx.dimension(function(d) {return (d.month); });
+            var group1 = dimension.group().reduceSum(function(d) { return d.interest; });
+            var group2 = dimension.group().reduceSum(function(d) { return d.principal; });
+            //console.log(group1);
             table
                .dimension(dimension)
                .group(function(d) { return ""})
                .size(Infinity)
-               .columns([function(d) { return d["Month"];},
-                function(d) { return d["Payment"];},
-                function(d) { return d["Principal"];},
-                function(d) { return d["Interest"];},
-                function(d) { return d["Balance"];},])
+               .columns([function(d) { return d.month;},
+                function(d) { return d.payment;},
+                function(d) { return d.principal;},
+                function(d) { return d.interest;},
+                function(d) { return d.balance;},])
                .sortBy(function (d) {
-                  return d["Month"];
+                  return d.month;
                })
                .renderlet(function(chart){
                     chart.selectAll('td, th')
@@ -177,8 +173,48 @@ filterAll() {
 
             table.render();
 
+            chart
+               .width(800)
+               .height(300)
+               //.dimension(dimension)
+               .colors('red')
+               //.group(group1, "Interest")
+               .brushOn(true)
+               .yAxisLabel("Dollars")
+               .xAxisLabel("Term (Months)")
+               .elasticY(true)
+               //.elasticX(true)
+               .x(d3.scale.linear().domain(d3.extent(data, function(d) {
+                    return ((d.month));
+                })))
+                .legend(dc.legend().x(80).y(20).itemHeight(13).gap(5))
+                .compose([
+                    dc.barChart(chart)
+                        .dimension(dimension)
+                        .colors('red')
+                        .group(group1, "Interest"),
+                        //.dashStyle([2,2]),
+                    dc.barChart(chart)
+                        .dimension(dimension)
+                        .colors('blue')
+                        .group(group2, "Principal")
+                        //.dashStyle([2,2])
+                    ])
+            chart.render();
+            //dc.renderAll();
 
-        });
+        //});
+    }
+
+    ngAfterContentInit(): void {
+        
+
+        var data = this.amortizationTable;
+        if(data[1] == null) {
+            d3.select("#time-series").style("display","none");
+            d3.select("#table1").style("display","none");
+        }
+        
     }
 
 }
