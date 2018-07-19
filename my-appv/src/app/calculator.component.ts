@@ -36,6 +36,15 @@ export class CalcComponent implements AfterContentInit{
 
     onSubmit() { this.submitted = true; }
 
+    openCity(cityName) {
+        var i;
+        var x = document.getElementsByClassName("city");
+        for (i = 0; i < x.length; i++) {
+           x[i].style.display = "none";  
+        }
+        document.getElementById(cityName).style.display = "block";  
+    }
+
     diagnostic() {
 
         var loanAmountMain = 0;
