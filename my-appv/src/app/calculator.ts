@@ -79,7 +79,7 @@ export class Calculator {
     return this.monthlyPayment;
   }
 
-  	getNumberOfPayments(){
+  getNumberOfPayments(){
   	return this.numberOfPayments = this.years * 12;
   }
 
