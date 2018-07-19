@@ -14,6 +14,8 @@ export class CalcComponent {
     mortgageCalc = new Calculator();
     amortizationTable = new Array(this.mortgageCalc.numberOfPayments);
 
+    loanAmount.value = 0;
+
     constructor(){}
 
     submitted = false;
