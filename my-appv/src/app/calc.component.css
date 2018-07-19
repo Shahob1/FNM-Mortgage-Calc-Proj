@@ -4,6 +4,12 @@
     width: 100%;
     padding-top: 30px; 
     padding-left: 178px;
+    border: 2px solid black;
+}
+
+thead {
+    display: block;
+    width: calc( 100% - 1em );
 }
 
 td, th {

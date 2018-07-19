@@ -98,19 +98,21 @@
 
     <div class="container" style="padding-top: 30px; padding-left: 140px" align="center" id="time-series">
             <h4>
-                Principal and Interest by Date
+                Principal and Interest by Term
                 <span>
                         <a class="reset"
                           href="javascript:void(0)"
                           (click)="filterAll()"
-                          style="display: none;">
+                          style="display: none; padding-left:50px;">
+                          <span class="glyphicon glyphicon-refresh"></span>
                           reset
                         </a>
                 </span>
             </h4>
     </div>
 
-    <div class="container" id="table1">
+    <div class="container" style="padding-bottom: 50px;" id="table1">
+        <div class="col-md-12">
             <table id='table'>
                     <thead>
                       <tr>
@@ -122,6 +124,7 @@
                       </tr>
                     </thead>
             </table>
+        </div>
     </div>
 </div>
 

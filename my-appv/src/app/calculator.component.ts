@@ -145,16 +145,25 @@ filterAll() {
                   return d.month;
                })
                .renderlet(function(chart){
+                chart.select('tbody')
+                .style('overflow-y','scroll')
+                .style('display','block')
+                .style('height','380px')
+                .style('width','100%');
                     chart.selectAll('td, th')
                         .style('border', '1px solid #ddd')
+                        //.style('width','20%')
                         .style('padding', '8px');
                         //.style('width', '100%');
                     chart.selectAll('tr:nth-child(even)')
                         .style('background-color','#f2f2f2');
-                    chart.selectAll('tr:hover')
-                        .style('background-color','#ddd');
+                    chart.selectAll('tr')
+                        .style('display','table')
+                        .style('table-layout','fixed')
+                        .style('width','100%');
                     chart.selectAll('tr.dc-table-group')
                         .style('display','none');
+                    
                     
                })
                .order(d3.ascending);
