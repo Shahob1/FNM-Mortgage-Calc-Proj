@@ -31,3 +31,9 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 npm install --save angular5-csv
 
 npm install aws-sdk
+
+## Devkit
+
+If ng serve --open doesn't run, try installing the devkit using:
+
+npm install --save-dev @angular-devkit/build-angular

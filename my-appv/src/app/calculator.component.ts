@@ -21,8 +21,14 @@ export class CalcComponent implements AfterContentInit{
     monthlyPay;
     totalInterest;
     totalCost;
+    monthlyPay5Less;
+    totalInterest5Less;
+    totalCost5Less;
+    monthlyPay5More;
+    totalInterest5More;
+    totalCost5More;
     
-
+    loanAmount.value = 0;
 
     constructor(){}
 
@@ -31,18 +37,49 @@ export class CalcComponent implements AfterContentInit{
     onSubmit() { this.submitted = true; }
 
     diagnostic() {
-    /** console.log("calculateMortgage:" + this.mortgageCalc.years);
-        console.log("calculateMortgage:" + this.mortgageCalc.getMonthlyPayment());
 
-        
+        var loanAmountMain = 0;
 
-        console.log("calculateInterest:" + this.mortgageCalc.calculateInterest());
-        console.log("calculateTotalCost:" + this.mortgageCalc.calculateTotal());*/
+        if (this.mortgageCalc.principal == 0 && this.mortgageCalc.downpayment == 0) {
+            loanAmountMain = this.mortgageCalc.loanAmount;
+        }
+        else {
+            if (loanAmount.value != this.mortgageCalc.principal - (this.mortgageCalc.principal * .01 * this.mortgageCalc.downpayment)) {
+                loanAmountMain = this.mortgageCalc.loanAmount;
+                homePrice.value = "";
+                downPayment.value = "";
+            }
+            else {
+                loanAmountMain = this.mortgageCalc.principal - (this.mortgageCalc.principal * .01 * (this.mortgageCalc.downpayment));
+                var loanAmount5LessDown = this.mortgageCalc.principal - (this.mortgageCalc.principal * .01 * (this.mortgageCalc.downpayment - 5));
+                var loanAmount5MoreDown = this.mortgageCalc.principal - (this.mortgageCalc.principal * .01 * (this.mortgageCalc.downpayment + 5));
+            }
+        }
 
-        this.monthlyPay = this.mortgageCalc.getMonthlyPayment().toLocaleString('en-us', {maximumFractionDigits: 2});
-        this.totalInterest = this.mortgageCalc.calculateInterest().toLocaleString('en-us', {maximumFractionDigits: 2});
-        this.totalCost = this.mortgageCalc.calculateTotal().toLocaleString('en-us', {maximumFractionDigits: 2});
+        //if (this.mortgageCalc.loanAmount == 0) { // hasn't been typed in
+        //    loanAmountMain = this.mortgageCalc.principal - (this.mortgageCalc.principal * .01 * (this.mortgageCalc.downpayment));
+        //    var loanAmount5LessDown = this.mortgageCalc.principal - (this.mortgageCalc.principal * .01 * (this.mortgageCalc.downpayment - 5));
+        //    var loanAmount5MoreDown = this.mortgageCalc.principal - (this.mortgageCalc.principal * .01 * (this.mortgageCalc.downpayment + 5));
+        //}
+        //else {
+        //    //if (this.mortgageCalc.loanAmount != loanAmountHTML) {
+        //        //grey out top 2 boxes and maybe erase values
+        //    //}
+        //    loanAmountMain = this.mortgageCalc.loanAmount;
+        //}
 
+        this.monthlyPay = this.mortgageCalc.getMonthlyPayment(loanAmountMain).toLocaleString('en-us', {maximumFractionDigits: 2});
+        this.totalInterest = this.mortgageCalc.calculateInterest(loanAmountMain).toLocaleString('en-us', {maximumFractionDigits: 2});
+        this.totalCost = this.mortgageCalc.calculateTotal(loanAmountMain).toLocaleString('en-us', {maximumFractionDigits: 2});
+
+        // USE THESE NEXT 6 LINES FOR THE NEW OUTPUTS
+        this.monthlyPay5Less = this.mortgageCalc.getMonthlyPayment(loanAmount5LessDown).toLocaleString('en-us', {maximumFractionDigits: 2});
+        this.totalInterest5Less = this.mortgageCalc.calculateInterest(loanAmount5LessDown).toLocaleString('en-us', {maximumFractionDigits: 2});
+        this.totalCost5Less = this.mortgageCalc.calculateTotal(loanAmount5LessDown).toLocaleString('en-us', {maximumFractionDigits: 2});
+
+        this.monthlyPay5More = this.mortgageCalc.getMonthlyPayment(loanAmount5MoreDown).toLocaleString('en-us', {maximumFractionDigits: 2});
+        this.totalInterest5More = this.mortgageCalc.calculateInterest(loanAmount5MoreDown).toLocaleString('en-us', {maximumFractionDigits: 2});
+        this.totalCost5More = this.mortgageCalc.calculateTotal(loanAmount5MoreDown).toLocaleString('en-us', {maximumFractionDigits: 2});
 
         this.createViz();
         return JSON.stringify(this.mortgageCalc);
@@ -59,8 +96,9 @@ export class CalcComponent implements AfterContentInit{
 
         
         var i: number;
+        this.mortgageCalc.loanAmount = loanAmount.value;
         var currBalance = this.mortgageCalc.loanAmount;
-        var monthlyPayment = this.mortgageCalc.getMonthlyPayment();
+        var monthlyPayment = this.mortgageCalc.getMonthlyPayment(currBalance);
         var numberOfPayments = this.mortgageCalc.getNumberOfPayments();
         var monthlyRate = this.mortgageCalc.getMonthlyRate();
 
@@ -134,10 +172,10 @@ filterAll() {
                 //console.log(format.parse (d["Date"]));
                 //d["Date"] = format.parse((d["Date"]));
                 d.month = d.month;
-                d.payment = parseFloat(d.payment.replace(',','')).toFixed(2);
-                d.interest = parseFloat(d.interest.replace(',','')).toFixed(2);
-                d.principal = parseFloat(d.principal.replace(',','')).toFixed(2);
-                d.balance = parseFloat(d.balance.replace(',','')).toFixed(2);
+                d.payment = parseFloat(d.payment.replace(/,/g ,'')).toFixed(2);
+                d.interest = parseFloat(d.interest.replace(/,/g ,'')).toFixed(2);
+                d.principal = parseFloat(d.principal.replace(/,/g ,'')).toFixed(2);
+                d.balance = parseFloat(d.balance.replace(/,/g ,'')).toFixed(2);
             });
             var ndx = crossfilter(data);
             var dimension = ndx.dimension(function(d) {return (d.month); });
@@ -157,6 +195,11 @@ filterAll() {
                   return d.month;
                })
                .renderlet(function(chart){
+                    chart.select('tbody')
+                        .style('overflow-y', 'scroll')
+                        .style('display', 'block')
+                        .style('height', '410px')
+                        .style('width', '100%');
                     chart.selectAll('td, th')
                         .style('border', '1px solid #ddd')
                         .style('padding', '8px');
@@ -165,6 +208,10 @@ filterAll() {
                         .style('background-color','#f2f2f2');
                     chart.selectAll('tr:hover')
                         .style('background-color','#ddd');
+                    chart.selectAll('tr')
+                        .style('display', 'table')
+                        .style('table-layout', 'fixed')
+                        .style('width', '100%');
                     chart.selectAll('tr.dc-table-group')
                         .style('display','none');
                     
@@ -183,6 +230,7 @@ filterAll() {
                .yAxisLabel("Dollars")
                .xAxisLabel("Term (Months)")
                .elasticY(true)
+               .margins({top:0,bottom:50,right:0,left:60})
                //.elasticX(true)
                .x(d3.scale.linear().domain(d3.extent(data, function(d) {
                     return ((d.month));

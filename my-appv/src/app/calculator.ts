@@ -3,44 +3,52 @@ import { Component } from '@angular/core';
 
 export class Calculator {
 
-  public principal: number;
-  public downpayment: number;
+  public principal: number = 0;
+  public downpayment: number = 0;
   public interest: number;
   public years: number;
-  public loanAmount: number;
+  public loanAmount: number = 0;
 
   // calculated values
   public monthlyRate: number;
   public numberOfPayments: number;
   public monthlyPayment: number;
+  public totalInterest: number;
 
   constructor(){
 
   }
 
-  calculateMortgage()
+  calculateMortgage(loanAmt: any)
   {
       
-        return this.getMonthlyPayment().toLocaleString('en-us', {maximumFractionDigits: 2});
+        return this.getMonthlyPayment(loanAmt).toLocaleString('en-us', {maximumFractionDigits: 2});
 
   }
 
 
-  calculateInterest()
+  // calculateInterest(loanAmt: any)
+  // {
+
+  //      this.totalInterest = (this.getMonthlyPayment(loanAmt) * this.getNumberOfPayments()) - loanAmt;
+  //      return this.totalInterest.toLocaleString('en-us', {maximumFractionDigits: 2});
+  
+  // }
+
+  calculateInterest(loanAmt: any)
   {
 
-    var totalInterest = (this.getMonthlyPayment() * this.getNumberOfPayments()) - this.loanAmount;
-
-       return totalInterest.toLocaleString('en-us', {maximumFractionDigits: 2});
+       this.totalInterest = (this.getMonthlyPayment(loanAmt) * this.getNumberOfPayments()) - loanAmt;
+       return this.totalInterest;
   
   }
 
-  calculateTotal()
+  calculateTotal(loanAmt: any)
   {
 
-    var totalCost = this.getMonthlyPayment() * this.getNumberOfPayments();
+    var totalCost = this.getMonthlyPayment(loanAmt) * this.getNumberOfPayments();
 
-       return totalCost.toLocaleString('en-us', {maximumFractionDigits: 2});
+       return totalCost;
 
   }
 
@@ -70,12 +78,12 @@ export class Calculator {
    return this.monthlyRate = (this.interest / 100) / 12;
   }
 
-  getMonthlyPayment()
+  getMonthlyPayment(loanAmt:any)
   {
   		this.monthlyRate = (this.interest / 100) / 12;
     	this.numberOfPayments = this.years * 12;
   		this.monthlyPayment = ((this.monthlyRate * ((this.monthlyRate + 1) ** this.numberOfPayments)) / 
-       (((this.monthlyRate + 1) ** this.numberOfPayments) - 1)) * (this.loanAmount);
+      (((this.monthlyRate + 1) ** this.numberOfPayments) - 1)) * (loanAmt);
     return this.monthlyPayment;
   }
 
