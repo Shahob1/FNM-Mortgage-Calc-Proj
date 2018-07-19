@@ -1,13 +1,14 @@
-<div style="text-align:center">
+<div style="text-align:center" >
     <h1>
         Welcome to Mortgage Calculator!
     </h1>
     <div class="container">
         <div class="col-md-6">
             <h2>Input</h2>
+
             <form class="form-horizontal" #calcform ="ngForm">
                 <!--{{diagnostic}}-->
-                
+            
                 <div class="form-group">
                     <label class="control-label col-sm-4" for="homePrice">Home Price: </label>
                     <div class="col-sm-8">
@@ -51,8 +52,6 @@
                     
                 </div>
 
-                <button type="submit" class="btn btn-success" (click)="diagnostic()" >Submit</button>
-
             </form>
         </div>
         <div class="col-md-6">
@@ -85,9 +84,15 @@
                     
                 </div>
                 
-                <button type="button" class="btn btn-success"  (click) ="calculateAmortization()" >Amortize</button>
-                <button class="btn btn-success"(click)="downloadCSV()">Download Report</button>
+
+                <button type="submit" class="btn btn-primary" (click)="diagnostic()" >Calculate</button>&nbsp;&nbsp;
+
+                <button type="button" class="btn btn-primary"  (click) ="calculateAmortization()" >Amortize</button>&nbsp;&nbsp;
+
+                <button class="btn btn-primary"(click)="downloadCSV()">Download Report</button>&nbsp;&nbsp;
+
                 <app-form-upload></app-form-upload>
+                
 
             </form>
 
