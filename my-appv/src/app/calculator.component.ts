@@ -34,12 +34,16 @@ export class CalcComponent implements AfterContentInit{
     /** console.log("calculateMortgage:" + this.mortgageCalc.years);
         console.log("calculateMortgage:" + this.mortgageCalc.getMonthlyPayment());
 
+        
+
+        console.log("calculateInterest:" + this.mortgageCalc.calculateInterest());
+        console.log("calculateTotalCost:" + this.mortgageCalc.calculateTotal());*/
+
         this.monthlyPay = this.mortgageCalc.getMonthlyPayment().toLocaleString('en-us', {maximumFractionDigits: 2});
         this.totalInterest = this.mortgageCalc.calculateInterest().toLocaleString('en-us', {maximumFractionDigits: 2});
         this.totalCost = this.mortgageCalc.calculateTotal().toLocaleString('en-us', {maximumFractionDigits: 2});
 
-        console.log("calculateInterest:" + this.mortgageCalc.calculateInterest());
-        console.log("calculateTotalCost:" + this.mortgageCalc.calculateTotal());*/
+
         this.createViz();
         return JSON.stringify(this.mortgageCalc);
     }
@@ -50,7 +54,7 @@ export class CalcComponent implements AfterContentInit{
 
     calculateAmortization()
     {
-        //var home = new Calculator(this.mortgageCalc.principal, this.mortgageCalc.downPayment, this.mortgageCalc.interest, this.mortgageCalc.years);
+        this.amortizationTable = new Array(this.mortgageCalc.getNumberOfPayments()); 
         console.log("number of payments" + this.mortgageCalc.getNumberOfPayments());
 
         
@@ -63,10 +67,10 @@ export class CalcComponent implements AfterContentInit{
         this.amortizationTable[0]= 
         {
             month : 0,
-            payment : "",
-            principal : "",
-            interest : "",
-            balance : currBalance,
+            payment : "0",
+            principal : "0",
+            interest : "0",
+            balance : currBalance.toLocaleString('en-us', {maximumFractionDigits: 2}),
         }
 
         for(i = 1; i <= numberOfPayments; i++)
@@ -123,7 +127,7 @@ filterAll() {
         //d3.csv("./assets//amort2.csv",function(data1) {
             //var format = d3.time.format("%B%Y");
         
-        data.shift();
+        //data.shift();
         //console.log(data[0]);
         //console.log(data1[1]);
             data.forEach(function(d) {
@@ -139,7 +143,7 @@ filterAll() {
             var dimension = ndx.dimension(function(d) {return (d.month); });
             var group1 = dimension.group().reduceSum(function(d) { return d.interest; });
             var group2 = dimension.group().reduceSum(function(d) { return d.principal; });
-            console.log(group1);
+            //console.log(group1);
             table
                .dimension(dimension)
                .group(function(d) { return ""})
@@ -172,12 +176,12 @@ filterAll() {
             chart
                .width(800)
                .height(300)
-               .dimension(dimension)
+               //.dimension(dimension)
                .colors('red')
-               .group(group1, "Interest")
+               //.group(group1, "Interest")
                .brushOn(true)
                .yAxisLabel("Dollars")
-               .xAxisLabel("Term")
+               .xAxisLabel("Term (Months)")
                .elasticY(true)
                //.elasticX(true)
                .x(d3.scale.linear().domain(d3.extent(data, function(d) {
